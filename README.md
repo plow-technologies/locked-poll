@@ -1,3 +1,5 @@
+[![Circle CI](https://circleci.com/gh/plow-technologies/locked-poll.svg?style=svg)](https://circleci.com/gh/plow-technologies/locked-poll)
+
 # locked-poll
 
 
