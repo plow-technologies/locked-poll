@@ -6,7 +6,7 @@
 {-# LANGUAGE RankNTypes            #-}
 {-# LANGUAGE ScopedTypeVariables   #-}
 
-module LockedPollSpec (test) where
+module LockedPollSpec (tests) where
 import qualified Data.Ord                         as Ord
 
 import           Control.Concurrent
@@ -33,8 +33,8 @@ import qualified Data.ByteString                  as BS
 -- --------------------------------------------------
 -- Exportable Tests
 --------------------------------------------------
-test :: TestTree
-test = testGroup "Locking Properties" [unitTests]
+tests :: TestTree
+tests = testGroup "Locking Properties" [unitTests]
 
 -- qcprops :: TestTree
 -- qcprops = _
@@ -42,8 +42,8 @@ test = testGroup "Locking Properties" [unitTests]
 
 unitTests :: TestTree
 unitTests = testGroup "Unit tests for lock stuff and other tests" [ testTests
-                                                                   , longTimeoutShouldWork
-                                                                   , shortTimeoutShouldBreak]
+                                                                  , longTimeoutShouldWork
+                                                                  , shortTimeoutShouldBreak]
  where
   testTests = testCase "make sure a bad file is a failure" $ assert (not <$> fullTestShouldBreak )
   longTimeoutShouldWork = testCase "a good file and reasonable timeout succeeds" $ assert (fullTestWithLock 300 )
@@ -71,23 +71,28 @@ fullTestShouldBreak = do
 fullTestWithLock :: Int64 -> IO Bool
 fullTestWithLock time = do
    writeToFileIncrementallyWithlock time noBreakFile
+   putStrLn "Done Writing Test File"
    checkResults noBreakFile
 
 writeToFileIncrementallyWithlock :: Int64 -> FilePath -> IO ()
 writeToFileIncrementallyWithlock time fileName = do
+  putStrLn "making lock function"
   lockingFunction <- makeLockingFunction time fst
+
   withFile fileName  AppendMode (\handle -> do
      let
         ioAction :: (Int, POSIXTime) -> IO ()
         ioAction key = threadDelay (5 * multiplier) >> waitThenWriteTheTime lockingFunction handle key
+     putStrLn "preparing to replicate"
      replicateM_ repitition $ ioAction  `traverse` keyList
      threadDelay (two *maxVal*( multiplier)) )
 
   where
-    two = two
+    two = 2
     repitition = 5 * two
     maxVal = 100
     waitThenWriteTheTime lockingFunction handle st = do
+                   putStrLn "getting Time"
                    currentTime <- getPOSIXTime
                    delayTime <- (* multiplier) <$> randomRIO (5,maxVal)
                    let
@@ -97,8 +102,10 @@ writeToFileIncrementallyWithlock time fileName = do
                    _ <- forkIO $ withLockedAction
                    return ()
 
-    multiplier = 10^(3::Integer)
-    nicelyFormattedPrint handle currentTime k = hPutStrLn handle $ show k <> "|"<> show currentTime
+    multiplier = 10^(4::Integer)
+    nicelyFormattedPrint handle currentTime k = do
+                         putStrLn (show k)
+                         hPutStrLn handle $ show k <> "|"<> show currentTime
 
 
 writeToFileIncrementally :: FilePath -> IO ()
