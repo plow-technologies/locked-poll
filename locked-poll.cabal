@@ -19,7 +19,7 @@ Library
 --  Other-Modules:        
   Build-Depends:        base >= 4 && < 5
                       , containers
-                      , time >= 1.5.0.1
+                      , clock
 
 executable locked-poll
   Default-Language:     Haskell2010
@@ -29,7 +29,8 @@ executable locked-poll
   Build-Depends:        base >= 4 && < 5
                       , containers 
                       , locked-poll
-                      , time
+                      , clock
+
 Test-Suite spec
   Type:                 exitcode-stdio-1.0
   Default-Language:     Haskell2010
@@ -45,7 +46,12 @@ Test-Suite spec
                       , tasty-golden
                       , tasty-hunit
                       , tasty-quickcheck
+                      , clock
+                      , lens
+                      , random
+                      , bytestring
                       , time
+                      , attoparsec
 
 Source-Repository head
   Type:                 git

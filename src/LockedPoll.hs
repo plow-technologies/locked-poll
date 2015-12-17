@@ -62,8 +62,8 @@ pattern LockTimedOut <- Nothing
 makeLockingFunction :: forall k lockableState . (Key k,Show lockableState) =>  Int64 ->  -- timeout
                        (KeyFcn lockableState k) ->          -- extract a key
                        IO ((lockableState -> IO ()) ->      -- function to run against state
-                            lockableState   ->                   -- incoming state
-                             IO ())
+                           lockableState   ->                   -- incoming state
+                           IO ())
 makeLockingFunction timeout getKey = do
   ioRefMapOfKeyValues <- newIORef  Map.empty :: IO (IORef (Map k TimeSpec) )
   return $ exportFunction ioRefMapOfKeyValues
