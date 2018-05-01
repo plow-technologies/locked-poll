@@ -45,9 +45,9 @@ unitTests = testGroup "Unit tests for lock stuff and other tests" [ testTests
                                                                   , longTimeoutShouldWork 
                                                                   , shortTimeoutShouldBreak]
  where
-  testTests               = testCase "make sure a bad file is a failure"           $ assert (not <$> fullTestShouldBreak )
-  longTimeoutShouldWork   = testCase "a good file and reasonable timeout succeeds" $ assert (fullTestWithLock 300 )
-  shortTimeoutShouldBreak = testCase "a good file and short timeout still fails"   $ assert (not <$> shortTestWithLock 1)
+  testTests               = testCase "make sure a bad file is a failure"           $ assertBool "(not <$> fullTestShouldBreak)" =<< (not <$> fullTestShouldBreak)
+  longTimeoutShouldWork   = testCase "a good file and reasonable timeout succeeds" $ assertBool "(fullTestWithLock 300 )" =<< (fullTestWithLock 300)
+  shortTimeoutShouldBreak = testCase "a good file and short timeout still fails"   $ assertBool "(not <$> shortTestWithLock 1)" =<< (not <$> shortTestWithLock 1)
 
 
 keyList :: [(Int, POSIXTime)]
