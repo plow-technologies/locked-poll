@@ -38,6 +38,8 @@ Test-Suite spec
                       , test
   Ghc-Options:          -Wall
   Main-Is:              Spec.hs
+  Other-Modules:        LockedPoll
+                      , LockedPollSpec
   Build-Depends:        QuickCheck
                       , base
                       , containers 
