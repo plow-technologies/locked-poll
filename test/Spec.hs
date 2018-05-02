@@ -12,4 +12,5 @@ main :: IO ()
 main = do
   removeTestFiles
   defaultMain tests
+
   removeTestFiles
