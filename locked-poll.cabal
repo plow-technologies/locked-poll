@@ -54,6 +54,7 @@ Test-Suite spec
                       , bytestring
                       , time
                       , attoparsec
+                      , directory
 
 Source-Repository head
   Type:                 git

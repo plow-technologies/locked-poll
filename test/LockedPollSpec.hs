@@ -6,7 +6,10 @@
 {-# LANGUAGE RankNTypes            #-}
 {-# LANGUAGE ScopedTypeVariables   #-}
 
-module LockedPollSpec (tests) where
+module LockedPollSpec (tests
+                      , shouldBreakFile
+                      , shortNoBreakFile
+                      , noBreakFile) where
 import qualified Data.Ord                         as Ord
 
 import           Control.Concurrent
