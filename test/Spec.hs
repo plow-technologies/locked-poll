@@ -2,7 +2,7 @@ import LockedPollSpec
 import Test.Tasty
 import System.Directory
 
-
+removeTestFiles :: IO ()
 removeTestFiles = do
   removeFile shouldBreakFile
   removeFile shortNoBreakFile
