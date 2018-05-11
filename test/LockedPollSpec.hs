@@ -6,7 +6,10 @@
 {-# LANGUAGE RankNTypes            #-}
 {-# LANGUAGE ScopedTypeVariables   #-}
 
-module LockedPollSpec (tests) where
+module LockedPollSpec (tests
+                      , shouldBreakFile
+                      , shortNoBreakFile
+                      , noBreakFile) where
 import qualified Data.Ord                         as Ord
 
 import           Control.Concurrent
@@ -42,12 +45,12 @@ tests = testGroup "Locking Properties" [unitTests]
 
 unitTests :: TestTree
 unitTests = testGroup "Unit tests for lock stuff and other tests" [ testTests
-                                                                  , longTimeoutShouldWork
+                                                                  , longTimeoutShouldWork 
                                                                   , shortTimeoutShouldBreak]
  where
-  testTests = testCase "make sure a bad file is a failure" $ assert (not <$> fullTestShouldBreak )
-  longTimeoutShouldWork = testCase "a good file and reasonable timeout succeeds" $ assert (fullTestWithLock 300 )
-  shortTimeoutShouldBreak = testCase "a good file and short timeout still fails" $ assert (not <$> fullTestWithLock 1)
+  testTests               = testCase "make sure a bad file is a failure"           $ assertBool "(not <$> fullTestShouldBreak)" =<< (not <$> fullTestShouldBreak)
+  longTimeoutShouldWork   = testCase "a good file and reasonable timeout succeeds" $ assertBool "(fullTestWithLock 300 )" =<< (fullTestWithLock 300)
+  shortTimeoutShouldBreak = testCase "a good file and short timeout still fails"   $ assertBool "(not <$> shortTestWithLock 1)" =<< (not <$> shortTestWithLock 1)
 
 
 keyList :: [(Int, POSIXTime)]
@@ -57,16 +60,31 @@ keyList = [(1,0),(2,0),(3,0),(4,0)]
 -- fileName :: FilePath
 -- fileName = "incremental-test-file.txt"
 
+
+
 shouldBreakFile :: FilePath
 shouldBreakFile = "incremental-test-file-should-break.txt"
 
+
+shortNoBreakFile :: FilePath
+shortNoBreakFile = "short-no-break-file.txt"
+
+
 noBreakFile :: FilePath
 noBreakFile = "incremental-test-file-no-break.txt"
+
+
+shortTestWithLock :: Int64 -> IO Bool
+shortTestWithLock time = do
+   writeToFileIncrementallyWithlock time shortNoBreakFile
+   putStrLn "Done Writing Test File"
+   checkResults shortNoBreakFile
 
 fullTestShouldBreak :: IO Bool
 fullTestShouldBreak = do
    writeToFileIncrementally shouldBreakFile
    checkResults shouldBreakFile
+
 
 fullTestWithLock :: Int64 -> IO Bool
 fullTestWithLock time = do

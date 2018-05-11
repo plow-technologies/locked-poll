@@ -1,5 +1,5 @@
 Name:                   locked-poll
-Version:                0.1.0
+Version:                0.2.0
 Author:                 Scott Murphy <scottmurphy09@gmail.com>
 Maintainer:             Scott Murphy <scottmurphy09@gmail.com>
 License:                BSD3
@@ -13,7 +13,7 @@ Extra-Source-Files:     README.md, ChangeLog.md
 Library
   Default-Language:     Haskell2010
   HS-Source-Dirs:       src
-  GHC-Options:          -Wall
+  GHC-Options:          -Wall -Werror
   Exposed-Modules:      LockedPoll
                         LockedPoll.Internal
 --  Other-Modules:        
@@ -24,7 +24,7 @@ Library
 executable locked-poll
   Default-Language:     Haskell2010
   HS-Source-Dirs:       src
-  GHC-Options:          -Wall
+  GHC-Options:          -Wall -Werror
   main-is:              Main.hs
   Build-Depends:        base >= 4 && < 5
                       , containers 
@@ -36,8 +36,10 @@ Test-Suite spec
   Default-Language:     Haskell2010
   Hs-Source-Dirs:       src
                       , test
-  Ghc-Options:          -Wall
+  Ghc-Options:          -Wall -Werror
   Main-Is:              Spec.hs
+  Other-Modules:        LockedPoll
+                      , LockedPollSpec
   Build-Depends:        QuickCheck
                       , base
                       , containers 
@@ -52,6 +54,7 @@ Test-Suite spec
                       , bytestring
                       , time
                       , attoparsec
+                      , directory
 
 Source-Repository head
   Type:                 git

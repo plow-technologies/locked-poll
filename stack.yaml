@@ -1,0 +1,11 @@
+flags: {}
+extra-package-dbs: []
+packages:
+- '.'
+extra-deps:
+- git: git@github.com:plow-technologies/regex-genex.git
+  commit: 7066bc8ae7c0edd8563dccad2f3fadab38b00a41
+- git: git@github.com:plow-technologies/stream-monad.git
+  commit: 9707a6e41af051d6e269b317263e8b9512b6fede
+resolver: lts-11.4
+allow-newer: true

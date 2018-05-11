@@ -46,3 +46,7 @@ tramp
 
 # Yesod 
 yesod-devel/
+
+incremental-test-file-no-break.txt
+incremental-test-file-should-break.txt
+*.txt
